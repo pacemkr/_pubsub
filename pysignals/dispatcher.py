@@ -3,7 +3,7 @@ import threading
 
 from pysignals import saferef
 
-__all__ = [ 'set_debug', 'Signal', 'receiver' ]
+__all__ = [ 'set_debug', 'Signal', 'receiver', 'any_signal' ]
 
 WEAKREF_TYPES = (weakref.ReferenceType, saferef.BoundMethodWeakref)
 
@@ -169,12 +169,16 @@ class Signal(object):
 
         Returns a list of tuple pairs [(receiver, response), ... ].
         """
+	if not self == any_signal:
+            named['signal'] = self
+            any_signal.send(sender, **named)
+
         responses = []
         if not self.receivers:
             return responses
 
         for receiver in self._live_receivers(_make_id(sender)):
-            response = receiver(signal=self, sender=sender, **named)
+            response = receiver(sender=sender, **named)
             responses.append((receiver, response))
         return responses
 
@@ -287,3 +291,5 @@ def receiver(signal, **kwargs):
         signal.connect(func, **kwargs)
         return func
     return _decorator
+
+any_signal = Signal()
