@@ -14,18 +14,18 @@ Additionally, PySignalsEx provides a special signal called 'any_signal'. When yo
 
 ::
 
-from pysignalsex import Signal, receiver, any_signal
+        from pysignalsex import Signal, receiver, any_signal
 
-@receiver(any_signal)
-def mylistener(sender, **kwargs):
-        print "kwargs:", kwargs
-        if kwargs['signal'] == mysignal:
-                print "mysignal"
-        if kwargs['signal'] == myothersignal:
-                print "myothersignal"
+        @receiver(any_signal)
+        def mylistener(sender, **kwargs):
+                print "kwargs:", kwargs
+                if kwargs['signal'] == mysignal:
+                        print "mysignal"
+                if kwargs['signal'] == myothersignal:
+                        print "myothersignal"
 
-mysignal = Signal(providing_args=['myarg'])
-myothersignal = Signal()
+        mysignal = Signal(providing_args=['myarg'])
+        myothersignal = Signal()
 
-mysignal.send(sender='sender1', myarg='myval')
-myothersignal.send(sender='sender2')
+        mysignal.send(sender='sender1', myarg='myval')
+        myothersignal.send(sender='sender2')
