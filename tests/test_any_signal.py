@@ -1,4 +1,4 @@
-from pysignals import Signal, receiver, any_signal
+from pysignalsex import Signal, receiver, any_signal
 
 def test_any_signal_listener():
 	outputall = []

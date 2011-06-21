@@ -1,7 +1,7 @@
 import weakref
 import threading
 
-from pysignals import saferef
+from pysignalsex import saferef
 
 __all__ = [ 'set_debug', 'Signal', 'receiver', 'any_signal' ]
 
@@ -12,10 +12,10 @@ def _make_id(target):
         return (id(target.im_self), id(target.im_func))
     return id(target)
 
-pysignals_debug = False
+debug = False
 
 def set_debug( val ):
-    pysignals_debug = val
+    debug = val
 
 class Signal(object):
     """
@@ -76,7 +76,7 @@ class Signal(object):
                 anything hashable.
         """
         # If debug is on, check that we got a good receiver
-        if pysignals_debug:
+        if debug:
             import inspect
             assert callable(receiver), "Signal receivers must be callable."
             
