@@ -187,6 +187,35 @@ class Signal(object):
             responses.append((receiver, response))
         return responses
 
+    def call(self, sender=None, **named):
+        """
+        Send signal from sender to the first connected receiver and return the response.
+
+        If the receiver raises an error, the error propagates back through call.
+
+        Arguments:
+
+            sender
+                Optional. The sender of the signal. Either a specific object or 
+                None (default) to use the string '[module_name] [caller_func_name]' 
+                as the sender.
+
+            named
+                Named arguments which will be passed to receivers.
+
+        Returns a list of tuple pairs [(receiver, response), ... ].
+        """
+        sender = sender or self._get_caller_name()
+
+	if not self == any_signal:
+            named['signal'] = self
+            any_signal.send(sender, **named)
+
+        receivers = self._live_receivers(_make_id(sender));
+        if not receivers: return
+
+        return receivers[0](sender=sender, **named)
+
     def send_robust(self, sender=None, **named):
         """
         Send signal from sender to all connected receivers catching errors.
@@ -212,6 +241,10 @@ class Signal(object):
         """
         sender = sender or self._get_caller_name()
 
+	if not self == any_signal:
+            named['signal'] = self
+            any_signal.send_robust(sender, **named)
+
         responses = []
         if not self.receivers:
             return responses
@@ -220,37 +253,12 @@ class Signal(object):
         # Return a list of tuple pairs [(receiver, response), ... ].
         for receiver in self._live_receivers(_make_id(sender)):
             try:
-                response = receiver(signal=self, sender=sender, **named)
+                response = receiver(sender=sender, **named)
             except Exception, err:
                 responses.append((receiver, err))
             else:
                 responses.append((receiver, response))
         return responses
-
-    def call(self, sender=None, **named):
-        """
-        Send signal from sender to the first connected receiver and return the response.
-
-        If the receiver raises an error, the error propagates back through call.
-
-        Arguments:
-
-            sender
-                Optional. The sender of the signal. Either a specific object or 
-                None (default) to use the string '[module_name] [caller_func_name]' 
-                as the sender.
-
-            named
-                Named arguments which will be passed to receivers.
-
-        Returns a list of tuple pairs [(receiver, response), ... ].
-        """
-        sender = sender or self._get_caller_name()
-
-        receivers = self._live_receivers(_make_id(sender));
-        if not receivers: return
-
-        return receivers[0](signal=self, sender=sender, **named)
 
     def _get_caller_name(self):
         frame = inspect.stack()[2]
