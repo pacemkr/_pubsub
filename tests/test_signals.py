@@ -55,13 +55,28 @@ def test_call_method():
     assert signal.call(sender='test', truthiness=True) == 'kindatrue'
     assert signal.call(sender='test', truthiness=False) == 'false'
 
-@py.test.mark.xfail
 def test_default_sender():
     signal = Signal()
 
     @receiver(signal)
     def check_sender(sender, **named):
         print sender
-        assert type(sender) is not string
+        assert sender == 'tests.test_signals test_default_sender'
 
     signal.send()
+    signal.call()
+    signal.send_robust()
+
+
+def test_default_sender_from_class():
+    signal = Signal()
+
+    @receiver(signal)
+    def check_sender(sender, **named):
+        print sender
+        assert sender == 'tests.test_signals my_closure'
+
+    def my_closure():
+        signal.send()
+
+    my_closure()
