@@ -220,6 +220,27 @@ class Signal(object):
                 responses.append((receiver, response))
         return responses
 
+    def call(self, sender, **named):
+        """
+        Send signal from sender to the first connected receiver and return the response.
+
+        If the receiver raises an error, the error propagates back through call.
+
+        Arguments:
+
+            sender
+                The sender of the signal Either a specific object or None.
+
+            named
+                Named arguments which will be passed to receivers.
+
+        Returns a list of tuple pairs [(receiver, response), ... ].
+        """
+        receivers = self._live_receivers(_make_id(sender));
+        if not receivers: return
+
+        return receivers[0](signal=self, sender=sender, **named)
+
     def _live_receivers(self, senderkey):
         """
         Filter sequence of receivers to get resolved, live receivers.
