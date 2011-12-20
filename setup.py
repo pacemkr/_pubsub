@@ -10,12 +10,12 @@ except:
     pass
 
 
-setup(name='pysignalsex',
+setup(name='pubsub',
       version='0.1.2',
       packages=find_packages(),
       author='Nick Zalutskiy',
       author_email='pacemkr@{nospam}gmail.com',
-      url='https://github.com/pacemkr/PySignalsEx',
+      url='https://github.com/pacemkr/PubSub',
       include_package_data=True,
       description=DESCRIPTION,
       long_description=LONG_DESCRIPTION,

@@ -2,7 +2,7 @@ import weakref
 import threading
 import inspect
 
-from pysignalsex import saferef
+from pubsub import saferef
 
 __all__ = [ 'set_debug', 'Signal', 'receiver', 'any_signal' ]
 

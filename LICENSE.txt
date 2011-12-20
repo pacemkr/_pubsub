@@ -1,4 +1,4 @@
-pysignalsex was originally forked from pysignals.
+pubsub was originally forked from pysignals.
 pysignals was originally forked from django.dispatch.
 
 Copyright (c) Django Software Foundation and individual contributors.

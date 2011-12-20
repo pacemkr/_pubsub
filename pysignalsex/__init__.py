@@ -5,4 +5,4 @@ originally based on pydispatch (BSD) http://pypi.python.org/pypi/PyDispatcher/2.
 See license.txt for original licenses.
 """
 
-from pysignalsex.dispatcher import Signal, receiver, any_signal
+from pubsub.dispatcher import Signal, receiver, any_signal
